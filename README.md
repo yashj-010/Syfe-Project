@@ -1027,7 +1027,7 @@ kubectl logs -n monitoring prometheus-prometheus-kube-prometheus-prometheus-0
 
 ---
 
-## ⚡ Performance Tuning
+## Performance Tuning
 
 ### Nginx/OpenResty Tuning
 
