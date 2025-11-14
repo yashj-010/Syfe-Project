@@ -1,0 +1,30 @@
+replicaCount: 2
+
+image:
+  nginx:
+    repository: yash010jain/openresty-wordpress
+    tag: "1.0"
+    pullPolicy: IfNotPresent
+  wordpress:
+    repository: yash010jain/wordpress
+    tag: "1.0"
+    pullPolicy: IfNotPresent
+  mysql:
+    repository: yash010jain/mysql-wordpress
+    tag: "8.0"
+    pullPolicy: IfNotPresent
+
+service:
+  type: LoadBalancer
+  port: 80
+
+mysql:
+  user: wordpress
+  password: wordpress_password
+  rootPassword: root_password
+  database: wordpress
+
+persistence:
+  enabled: true
+  storageClass: nfs-client    # your RWX storage class
+  size: 10Gi

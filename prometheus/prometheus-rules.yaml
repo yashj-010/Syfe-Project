@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: wordpress-rules
+  namespace: monitoring
+spec:
+  groups:
+  - name: wordpress-alerts
+    rules:
+    - alert: WordpressDown
+      expr: kube_deployment_status_replicas_available{deployment="my-wordpress"} < 1
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "WordPress deployment is down"
+        description: "WordPress pods are not available for more than 5 minutes"

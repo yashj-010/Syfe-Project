@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "wordpress.fullname" . }}-wordpress
+  labels:
+    app.kubernetes.io/name: wordpress
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "wordpress.fullname" . }}-wordpress
+  template:
+    metadata:
+      labels:
+        app: {{ include "wordpress.fullname" . }}-wordpress
+    spec:
+      containers:
+      - name: wordpress
+        image: "{{ .Values.image.wordpress.repository }}:{{ .Values.image.wordpress.tag }}"
+        imagePullPolicy: {{ .Values.image.wordpress.pullPolicy }}
+        env:
+        - name: WORDPRESS_DB_HOST
+          value: {{ include "wordpress.fullname" . }}-mysql:3306
+        - name: WORDPRESS_DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "wordpress.fullname" . }}-secret
+              key: db-user
+        - name: WORDPRESS_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "wordpress.fullname" . }}-secret
+              key: db-password
+        - name: WORDPRESS_DB_NAME
+          value: {{ .Values.mysql.database }}
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: wp-data
+          mountPath: /var/www/html/wp-content
+      - name: proxy
+        image: "{{ .Values.image.nginx.repository }}:{{ .Values.image.nginx.tag }}"
+        imagePullPolicy: {{ .Values.image.nginx.pullPolicy }}
+        ports:
+        - containerPort: 80
+        # if using sidecar proxy; else you can run proxy as separate deployment
+      volumes:
+      - name: wp-data
+        persistentVolumeClaim:
+          claimName: wp-content-pvc
