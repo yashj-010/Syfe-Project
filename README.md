@@ -90,13 +90,12 @@ This repository provides a production-ready WordPress deployment on Kubernetes w
 ### Quick Check
 
 ```bash
-# check Kubernetes version
 kubectl version --short
 
 # check availavle storage classes
 kubectl get storageclass
 
-# Check cluster resources
+# cluster resources
 kubectl top nodes
 ```
 
@@ -114,10 +113,6 @@ cd wordpress-k8s-production
 ### Build Images
 
 ```bash
-# Build all images
-./scripts/build-images.sh
-
-# Or build individually
 cd docker/nginx && docker build -t your-registry/openresty:latest .
 cd docker/wordpress && docker build -t your-registry/wordpress:latest .
 cd docker/mysql && docker build -t your-registry/mysql:latest .
@@ -134,13 +129,13 @@ vim helm/wordpress/values.yaml
 ### Deploy
 
 ```bash
-# Install WordPress
+# install WordPress
 helm install my-wordpress ./helm/wordpress \
   --namespace wordpress \
   --create-namespace \
   -f helm/wordpress/values.yaml
 
-# Install Monitoring
+# Install monitoring
 helm install prometheus prometheus-community/kube-prometheus-stack \
   --namespace monitoring \
   --create-namespace \
@@ -150,14 +145,13 @@ helm install prometheus prometheus-community/kube-prometheus-stack \
 ### Verify
 
 ```bash
-# Check pods
 kubectl get pods -n wordpress
 kubectl get pods -n monitoring
 
 # Get WordPress URL
 kubectl get svc -n wordpress my-wordpress
 
-# Access Grafana (default: admin/prom-operator)
+# access Grafana
 kubectl port-forward -n monitoring svc/prometheus-grafana 3000:80
 ```
 
@@ -246,7 +240,7 @@ kubectl get storageclass
 Edit `helm/wordpress/values.yaml`:
 
 ```yaml
-# Image Configuration
+# image
 image:
   nginx:
     repository: your-registry/openresty
@@ -258,7 +252,7 @@ image:
     repository: your-registry/mysql
     tag: "8.0"
 
-# Scaling Configuration
+# scaling
 replicaCount: 3
 
 autoscaling:
@@ -267,7 +261,7 @@ autoscaling:
   maxReplicas: 10
   targetCPUUtilizationPercentage: 70
 
-# Storage Configuration
+# storage
 persistence:
   enabled: true
   storageClass: "nfs-client"  # Your RWX storage class
@@ -276,7 +270,7 @@ persistence:
   mysql:
     size: 50Gi
 
-# Database Configuration
+# database
 mysql:
   rootPassword: "CHANGE_ME_ROOT_PASSWORD"
   database: "wordpress"
@@ -296,10 +290,8 @@ kubectl create secret generic wordpress-secrets \
 ### Step 4: Deploy WordPress
 
 ```bash
-# Create namespace
 kubectl create namespace wordpress
 
-# Deploy Helm chart
 helm install my-wordpress ./helm/wordpress \
   --namespace wordpress \
   --set mysql.rootPassword="$(openssl rand -base64 32)" \
@@ -309,7 +301,6 @@ helm install my-wordpress ./helm/wordpress \
   --set wordpress.config.loggedInKey="$(openssl rand -base64 64)" \
   --set wordpress.config.nonceKey="$(openssl rand -base64 64)"
 
-# Watch deployment
 kubectl get pods -n wordpress -w
 ```
 
