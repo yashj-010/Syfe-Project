@@ -1,23 +1,4 @@
-# Production-Grade WordPress on Kubernetes
-
-<div align="center">
-
-![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white)
-![WordPress](https://img.shields.io/badge/WordPress-%23117AC9.svg?style=for-the-badge&logo=WordPress&logoColor=white)
-![Nginx](https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white)
-![MySQL](https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white)
-![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=Prometheus&logoColor=white)
-![Grafana](https://img.shields.io/badge/grafana-%23F46800.svg?style=for-the-badge&logo=grafana&logoColor=white)
-
-Enterprise-grade WordPress deployment with OpenResty, MySQL, and comprehensive monitoring
-
-[Features](#-features) •
-[Architecture](#-architecture) •
-[Quick Start](#-quick-start) •
-[Documentation](#-documentation) •
-[Monitoring](#-monitoring)
-
-</div>
+# Syfe-Assignment
 
 ---
 
