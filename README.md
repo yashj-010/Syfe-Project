@@ -216,7 +216,7 @@ docker push your-registry/mysql:8.0
 
 ### Step 2: Setup Storage
 
-#### Option A: NFS Provisioner
+#### NFS Provisioner
 
 ```bash
 helm repo add nfs-subdir-external-provisioner \
@@ -226,13 +226,6 @@ helm install nfs-provisioner nfs-subdir-external-provisioner/nfs-subdir-external
   --set nfs.server=YOUR_NFS_SERVER \
   --set nfs.path=/exported/path \
   --set storageClass.name=nfs-client
-```
-
-#### Option B: Verify Existing Storage
-
-```bash
-kubectl get storageclass
-# Look for a class with VOLUMEBINDINGMODE: Immediate and supports ReadWriteMany
 ```
 
 ### Step 3: Configure Helm Values
