@@ -1,4 +1,4 @@
-# 🚀 Production-Grade WordPress on Kubernetes
+# Production-Grade WordPress on Kubernetes
 
 <div align="center">
 
@@ -9,7 +9,7 @@
 ![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=Prometheus&logoColor=white)
 ![Grafana](https://img.shields.io/badge/grafana-%23F46800.svg?style=for-the-badge&logo=grafana&logoColor=white)
 
-**Enterprise-grade WordPress deployment with OpenResty, MySQL, and comprehensive monitoring**
+Enterprise-grade WordPress deployment with OpenResty, MySQL, and comprehensive monitoring
 
 [Features](#-features) •
 [Architecture](#-architecture) •
@@ -21,7 +21,7 @@
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Overview](#-overview)
 - [Features](#-features)
@@ -40,42 +40,42 @@
 
 ---
 
-## 🌟 Overview
+## Overview
 
-This repository provides a **production-ready WordPress deployment** on Kubernetes with enterprise-grade features including:
+This repository provides a production-ready WordPress deployment on Kubernetes with enterprise-grade features including:
 
-- **High Availability** with horizontal pod autoscaling
-- **Custom OpenResty/Nginx** with Lua support for advanced routing and security
-- **Optimized MySQL** configuration for WordPress workloads
-- **Comprehensive Monitoring** with Prometheus and Grafana
-- **Advanced Alerting** for proactive issue detection
-- **ReadWriteMany Storage** for seamless scaling
+- High Availability with horizontal pod autoscaling
+- Custom OpenResty/Nginx with Lua support for advanced routing and security
+- Optimized MySQL configuration for WordPress workloads
+- Comprehensive Monitoring with Prometheus and Grafana
+- Advanced Alerting for proactive issue detection
+- ReadWriteMany Storage for seamless scaling
 
 ### Why This Solution?
 
 | Feature | This Solution | Basic Deployment |
 |---------|--------------|------------------|
-| **Scalability** | ✅ HPA with 3-10 replicas | ❌ Single instance |
-| **Monitoring** | ✅ 50+ metrics tracked | ⚠️ Basic health checks |
-| **Performance** | ✅ OpenResty + Lua | ⚠️ Standard Nginx |
-| **Alerts** | ✅ 15+ alert rules | ❌ None |
-| **Storage** | ✅ RWX for scaling | ❌ RWO limitations |
-| **Security** | ✅ Built-in rate limiting | ⚠️ Basic |
+| Scalability |  HPA with 3-10 replicas |  Single instance |
+| Monitoring |  50+ metrics tracked |  Basic health checks |
+| Performance |  OpenResty + Lua |  Standard Nginx |
+| Alerts |  15+ alert rules |  None |
+| Storage |  RWX for scaling |  RWO limitations |
+| Security |  Built-in rate limiting |  Basic |
 
 ---
 
-## ✨ Features
+## Features
 
-### 🎯 Core Features
+### Core Features
 
-- **🔄 Auto-Scaling**: Horizontal Pod Autoscaler based on CPU/Memory
-- **📊 Monitoring**: Real-time metrics with Prometheus & Grafana
-- **🔔 Alerting**: 15+ pre-configured alert rules
-- **🛡️ Security**: Lua-based rate limiting and security headers
-- **💾 Persistent Storage**: ReadWriteMany volumes for scaling
-- **🔧 Optimized**: Performance-tuned for high traffic
+-  Auto-Scaling: Horizontal Pod Autoscaler based on CPU/Memory
+-  Monitoring: Real-time metrics with Prometheus & Grafana
+-  Alerting: 15+ pre-configured alert rules
+-  Security: Lua-based rate limiting and security headers
+-  Persistent Storage: ReadWriteMany volumes for scaling
+-  Optimized: Performance-tuned for high traffic
 
-### 🏗️ Technical Stack
+### Technical Stack
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -117,42 +117,42 @@ This repository provides a **production-ready WordPress deployment** on Kubernet
 ```mermaid
 graph TB
     subgraph "External"
-        User[👤 Users]
-        LB[⚖️ Load Balancer]
+        User[ Users]
+        LB[ Load Balancer]
     end
     
     subgraph "Kubernetes Cluster"
         subgraph "WordPress Namespace"
             subgraph "WordPress Pods"
-                N1[🌐 Nginx + Lua]
-                W1[📝 WordPress PHP-FPM]
+                N1[ Nginx + Lua]
+                W1[ WordPress PHP-FPM]
                 N1 --> W1
                 
-                N2[🌐 Nginx + Lua]
-                W2[📝 WordPress PHP-FPM]
+                N2[ Nginx + Lua]
+                W2[ WordPress PHP-FPM]
                 N2 --> W2
                 
-                N3[🌐 Nginx + Lua]
-                W3[📝 WordPress PHP-FPM]
+                N3[ Nginx + Lua]
+                W3[ WordPress PHP-FPM]
                 N3 --> W3
             end
             
             subgraph "Database"
-                MySQL[(🗄️ MySQL 8.0)]
+                MySQL[( MySQL 8.0)]
             end
             
             subgraph "Storage"
-                PVC1[💾 WordPress PVC<br/>ReadWriteMany]
-                PVC2[💾 MySQL PVC<br/>ReadWriteOnce]
+                PVC1[ WordPress PVC<br/>ReadWriteMany]
+                PVC2[ MySQL PVC<br/>ReadWriteOnce]
             end
             
-            HPA[📈 Horizontal Pod<br/>Autoscaler]
+            HPA[ Horizontal Pod<br/>Autoscaler]
         end
         
         subgraph "Monitoring Namespace"
-            Prom[📊 Prometheus]
-            Graf[📈 Grafana]
-            Alert[🔔 Alertmanager]
+            Prom[ Prometheus]
+            Graf[ Grafana]
+            Alert[ Alertmanager]
             
             Prom --> Graf
             Prom --> Alert
@@ -228,13 +228,13 @@ sequenceDiagram
 
 ```mermaid
 graph LR
-    A[📦 Build Images] --> B[🚀 Push to Registry]
-    B --> C[⚙️ Setup Storage]
-    C --> D[📊 Deploy Monitoring]
-    D --> E[🌐 Deploy WordPress]
-    E --> F[✅ Verify Deployment]
-    F --> G[📈 Configure Alerts]
-    G --> H[🎉 Production Ready]
+    A[Build Images] --> B[Push to Registry]
+    B --> C[ Setup Storage]
+    C --> D[ Deploy Monitoring]
+    D --> E[ Deploy WordPress]
+    E --> F[ Verify Deployment]
+    F --> G[Configure Alerts]
+    G --> H[Production Ready]
     
     style A fill:#e3f2fd
     style B fill:#e8f5e9
@@ -248,23 +248,23 @@ graph LR
 
 ---
 
-## 📦 Prerequisites
+## Prerequisites
 
 ### Required Tools
 
 | Tool | Version | Purpose |
 |------|---------|---------|
-| **Kubernetes** | 1.24+ | Container orchestration |
-| **Helm** | 3.0+ | Package manager |
-| **kubectl** | 1.24+ | Kubernetes CLI |
-| **Docker** | 20.10+ | Container runtime |
+| Kubernetes | 1.24+ | Container orchestration |
+| Helm | 3.0+ | Package manager |
+| kubectl | 1.24+ | Kubernetes CLI |
+| Docker | 20.10+ | Container runtime |
 
 ### Kubernetes Requirements
 
-- **CPU**: Minimum 4 cores available
-- **Memory**: Minimum 8GB available
-- **Storage**: ReadWriteMany (RWX) storage class (NFS, CephFS, etc.)
-- **LoadBalancer**: Cloud provider LB or MetalLB
+- CPU: Minimum 4 cores available
+- Memory: Minimum 8GB available
+- Storage: ReadWriteMany (RWX) storage class (NFS, CephFS, etc.)
+- LoadBalancer: Cloud provider LB or MetalLB
 
 ### Quick Check
 
@@ -281,16 +281,16 @@ kubectl top nodes
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
-### 1️⃣ Clone Repository
+### Clone Repository
 
 ```bash
 git clone https://github.com/yourusername/wordpress-k8s-production.git
 cd wordpress-k8s-production
 ```
 
-### 2️⃣ Build Images
+### Build Images
 
 ```bash
 # Build all images
@@ -302,7 +302,7 @@ cd docker/wordpress && docker build -t your-registry/wordpress:latest .
 cd docker/mysql && docker build -t your-registry/mysql:latest .
 ```
 
-### 3️⃣ Configure Values
+### Configure Values
 
 ```bash
 # Copy example values
@@ -312,7 +312,7 @@ cp helm/wordpress/values.example.yaml helm/wordpress/values.yaml
 vim helm/wordpress/values.yaml
 ```
 
-### 4️⃣ Deploy
+### Deploy
 
 ```bash
 # Install WordPress
@@ -328,7 +328,7 @@ helm install prometheus prometheus-community/kube-prometheus-stack \
   -f monitoring/prometheus-values.yaml
 ```
 
-### 5️⃣ Verify
+### Verify
 
 ```bash
 # Check pods
@@ -344,7 +344,7 @@ kubectl port-forward -n monitoring svc/prometheus-grafana 3000:80
 
 ---
 
-## 📚 Detailed Installation
+## Detailed Installation
 
 ### Step 1: Prepare Docker Images
 
@@ -354,12 +354,12 @@ kubectl port-forward -n monitoring svc/prometheus-grafana 3000:80
 cd docker/nginx
 ```
 
-**Dockerfile Features:**
-- ✅ OpenResty 1.21.4.1
-- ✅ Lua support with custom modules
-- ✅ Custom configure options
-- ✅ Prometheus metrics endpoint
-- ✅ Health check endpoint
+Dockerfile Features:
+-  OpenResty 1.21.4.1
+-  Lua support with custom modules
+-  Custom configure options
+-  Prometheus metrics endpoint
+-  Health check endpoint
 
 ```bash
 docker build -t your-registry/openresty:latest .
@@ -372,12 +372,12 @@ docker push your-registry/openresty:latest
 cd docker/wordpress
 ```
 
-**Includes:**
-- ✅ PHP 8.2-FPM
-- ✅ All WordPress extensions
-- ✅ OPcache optimization
-- ✅ Redis support
-- ✅ WP-CLI pre-installed
+Includes:
+-  PHP 8.2-FPM
+-  All WordPress extensions
+-  OPcache optimization
+-  Redis support
+-  WP-CLI pre-installed
 
 ```bash
 docker build -t your-registry/wordpress:latest .
@@ -390,11 +390,11 @@ docker push your-registry/wordpress:latest
 cd docker/mysql
 ```
 
-**Optimizations:**
-- ✅ InnoDB tuning
-- ✅ Query cache enabled
-- ✅ Slow query logging
-- ✅ WordPress-specific settings
+Optimizations:
+-  InnoDB tuning
+-  Query cache enabled
+-  Slow query logging
+-  WordPress-specific settings
 
 ```bash
 docker build -t your-registry/mysql:8.0 .
@@ -465,7 +465,7 @@ mysql:
   password: "CHANGE_ME_WP_PASSWORD"
 ```
 
-**🔒 Security Note:** Use Kubernetes secrets for production:
+ Security Note: Use Kubernetes secrets for production:
 
 ```bash
 kubectl create secret generic wordpress-secrets \
@@ -494,7 +494,7 @@ helm install my-wordpress ./helm/wordpress \
 kubectl get pods -n wordpress -w
 ```
 
-**Expected Output:**
+Expected Output:
 
 ```
 NAME                            READY   STATUS    RESTARTS   AGE
@@ -549,7 +549,7 @@ kubectl port-forward -n monitoring svc/prometheus-grafana 3000:80
 
 ---
 
-## ⚙️ Configuration
+##  Configuration
 
 ### Environment Variables
 
@@ -607,7 +607,7 @@ long_query_time=2
 
 ---
 
-## 📊 Monitoring & Alerting
+##  Monitoring & Alerting
 
 ### Metrics Overview
 
@@ -615,7 +615,7 @@ long_query_time=2
 
 ```mermaid
 graph TD
-    A[📊 Metrics Collection] --> B[Nginx Metrics]
+    A[ Metrics Collection] --> B[Nginx Metrics]
     A --> C[WordPress Metrics]
     A --> D[MySQL Metrics]
     A --> E[Kubernetes Metrics]
@@ -643,20 +643,20 @@ graph TD
 
 ### Grafana Dashboard
 
-**Production WordPress Dashboard includes:**
+Production WordPress Dashboard includes:
 
 | Panel | Metric | Alert Threshold |
 |-------|--------|----------------|
-| 🖥️ Pod CPU | CPU utilization per pod | > 80% warning, > 95% critical |
-| 📈 Total Requests | Requests per second | Monitor trends |
-| ❌ 5xx Errors | Error rate percentage | > 5% critical |
-| ⏱️ Request Latency | P95 & P99 latency | > 2s warning |
-| 💾 Memory Usage | Memory per pod | > 85% warning |
-| 🗄️ MySQL Connections | Active connections | > 80% of max |
-| 📊 Query Rate | Queries per second | Monitor trends |
-| 💿 Disk Usage | Storage utilization | > 85% warning |
+|  Pod CPU | CPU utilization per pod | > 80% warning, > 95% critical |
+|  Total Requests | Requests per second | Monitor trends |
+|  5xx Errors | Error rate percentage | > 5% critical |
+|  Request Latency | P95 & P99 latency | > 2s warning |
+|  Memory Usage | Memory per pod | > 85% warning |
+|  MySQL Connections | Active connections | > 80% of max |
+|  Query Rate | Queries per second | Monitor trends |
+|  Disk Usage | Storage utilization | > 85% warning |
 
-**Dashboard Screenshot Placeholder:**
+Dashboard Screenshot Placeholder:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -669,13 +669,13 @@ graph TD
 │  ▂▂▂▃▂▂▂ 0.2%        │  P95: 120ms | P99: 250ms           │
 ├───────────────────────┴─────────────────────────────────────┤
 │  MySQL Connections: 45/200                                  │
-│  Active Pods: 3/3 ✅                                        │
+│  Active Pods: 3/3                                         │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 ### Alert Rules
 
-#### Critical Alerts 🔴
+#### Critical Alerts 
 
 ```yaml
 - alert: MySQLDown
@@ -694,7 +694,7 @@ graph TD
   severity: critical
 ```
 
-#### Warning Alerts ⚠️
+#### Warning Alerts 
 
 ```yaml
 - alert: HighCPUUtilization
@@ -725,7 +725,7 @@ receivers:
     slack_configs:
       - api_url: 'YOUR_WEBHOOK_URL'
         channel: '#wordpress-alerts'
-        title: '🚨 WordPress Alert'
+        title: ' WordPress Alert'
     
     email_configs:
       - to: 'team@example.com'
@@ -843,20 +843,20 @@ kubectl scale deployment my-wordpress -n wordpress --replicas=3
 
 ---
 
-## 🔍 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
 #### Pods Not Starting
 
-**Symptoms:**
+Symptoms:
 ```bash
 kubectl get pods -n wordpress
 NAME                            READY   STATUS    RESTARTS   AGE
 my-wordpress-5d7c9f8b6d-7xk2m   0/3     Pending   0          5m
 ```
 
-**Debug:**
+Debug:
 ```bash
 # Check pod events
 kubectl describe pod -n wordpress my-wordpress-5d7c9f8b6d-7xk2m
@@ -867,7 +867,7 @@ kubectl describe pod -n wordpress my-wordpress-5d7c9f8b6d-7xk2m
 # - Image pull errors
 ```
 
-**Solution:**
+Solution:
 ```bash
 # Check resources
 kubectl top nodes
@@ -881,14 +881,14 @@ kubectl get events -n wordpress --sort-by='.lastTimestamp'
 
 #### PVC Not Binding
 
-**Symptoms:**
+Symptoms:
 ```bash
 kubectl get pvc -n wordpress
 NAME                  STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS
 wordpress-pvc         Pending                                      nfs-client
 ```
 
-**Solution:**
+Solution:
 ```bash
 # Check storage class exists
 kubectl get storageclass
@@ -915,7 +915,7 @@ EOF
 
 #### High 5xx Error Rate
 
-**Debug:**
+Debug:
 ```bash
 # Check Nginx logs
 kubectl logs -n wordpress -l app.kubernetes.io/name=wordpress -c nginx | grep " 5"
@@ -927,7 +927,7 @@ kubectl logs -n wordpress -l app.kubernetes.io/name=wordpress -c wordpress
 kubectl get pods -n wordpress
 ```
 
-**Common causes:**
+Common causes:
 - MySQL connection issues
 - PHP-FPM process limit reached
 - Out of memory
@@ -935,7 +935,7 @@ kubectl get pods -n wordpress
 
 #### MySQL Connection Issues
 
-**Debug:**
+Debug:
 ```bash
 # Check MySQL service
 kubectl get svc -n wordpress my-wordpress-mysql
@@ -950,7 +950,7 @@ kubectl logs -n wordpress my-wordpress-mysql-0
 
 #### Monitoring Not Working
 
-**Debug:**
+Debug:
 ```bash
 # Check ServiceMonitor
 kubectl get servicemonitor -n monitoring
