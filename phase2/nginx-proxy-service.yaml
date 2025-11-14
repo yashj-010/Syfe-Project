@@ -9,4 +9,5 @@ spec:
   ports:
     - port: 82
       targetPort: 82
-      nodePort: 30090
+      nodePort: 30091
+
