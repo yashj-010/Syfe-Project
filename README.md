@@ -1,25 +1,5 @@
 # Syfe-Assignment
 
----
-
-## Table of Contents
-
-- [Overview](#-overview)
-- [Features](#-features)
-- [Architecture](#-architecture)
-- [Prerequisites](#-prerequisites)
-- [Quick Start](#-quick-start)
-- [Detailed Installation](#-detailed-installation)
-- [Configuration](#-configuration)
-- [Monitoring & Alerting](#-monitoring--alerting)
-- [Operations](#-operations)
-- [Troubleshooting](#-troubleshooting)
-- [Performance Tuning](#-performance-tuning)
-- [Security](#-security)
-- [Contributing](#-contributing)
-
----
-
 ## Overview
 
 This repository provides a production-ready WordPress deployment on Kubernetes with enterprise-grade features including:
