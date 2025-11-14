@@ -778,4 +778,3 @@ kubectl logs -n monitoring prometheus-prometheus-kube-prometheus-prometheus-0
   ```bash
   kubectl get prometheusrule -n monitoring
   ```
-```
