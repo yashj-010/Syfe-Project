@@ -257,7 +257,7 @@ autoscaling:
 # storage
 persistence:
   enabled: true
-  storageClass: "nfs-client"  # Your RWX storage class
+  storageClass: "nfs-client" 
   wordpress:
     size: 20Gi
   mysql:
@@ -583,7 +583,6 @@ kubectl logs -n wordpress -l app.kubernetes.io/name=wordpress -c nginx -f
 
 kubectl logs -n wordpress my-wordpress-mysql-0 -f
 
-# Previous container logs (after restart)
 kubectl logs -n wordpress POD_NAME -c nginx --previous
 ```
 
@@ -779,29 +778,4 @@ kubectl logs -n monitoring prometheus-prometheus-kube-prometheus-prometheus-0
   ```bash
   kubectl get prometheusrule -n monitoring
   ```
-```
-
----
-
-## Performance Tuning
-
-
-```nginx
-worker_processes auto;
-
-events {
-    worker_connections 4096;
-    use epoll;
-    multi_accept on;
-}
-
-keepalive_timeout 65;
-keepalive_requests 1000;
-
-client_body_buffer_size 128k;
-client_max_body_size 64M;
-
-proxy_cache_path /var/cache/nginx levels=1:2 
-                 keys_zone=wordpress_cache:10m 
-                 max_size=1g inactive=60m;
 ```
