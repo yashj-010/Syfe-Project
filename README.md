@@ -36,7 +36,6 @@ Enterprise-grade WordPress deployment with OpenResty, MySQL, and comprehensive m
 - [Performance Tuning](#-performance-tuning)
 - [Security](#-security)
 - [Contributing](#-contributing)
-- [License](#-license)
 
 ---
 
@@ -110,7 +109,7 @@ This repository provides a production-ready WordPress deployment on Kubernetes w
 
 ---
 
-## 🏛️ Architecture
+## Architecture
 
 ### System Architecture Diagram
 
@@ -269,10 +268,10 @@ graph LR
 ### Quick Check
 
 ```bash
-# Check Kubernetes version
+# check Kubernetes version
 kubectl version --short
 
-# Check available storage classes
+# check availavle storage classes
 kubectl get storageclass
 
 # Check cluster resources
@@ -305,10 +304,8 @@ cd docker/mysql && docker build -t your-registry/mysql:latest .
 ### Configure Values
 
 ```bash
-# Copy example values
 cp helm/wordpress/values.example.yaml helm/wordpress/values.yaml
 
-# Edit with your configuration
 vim helm/wordpress/values.yaml
 ```
 
@@ -507,44 +504,31 @@ my-wordpress-mysql-0            2/2     Running   0          2m
 ### Step 5: Deploy Monitoring Stack
 
 ```bash
-# Add Prometheus repo
 helm repo add prometheus-community \
   https://prometheus-community.github.io/helm-charts
 helm repo update
 
-# Deploy Prometheus + Grafana
 helm install prometheus prometheus-community/kube-prometheus-stack \
   --namespace monitoring \
   --create-namespace \
   -f monitoring/prometheus-values.yaml
 
-# Apply custom alert rules
 kubectl apply -f monitoring/prometheus-rules.yaml -n monitoring
 
-# Wait for pods
 kubectl get pods -n monitoring -w
 ```
 
 ### Step 6: Import Grafana Dashboards
 
 ```bash
-# Get Grafana password
+
 kubectl get secret -n monitoring prometheus-grafana \
   -o jsonpath="{.data.admin-password}" | base64 -d
 echo
 
-# Port-forward to Grafana
+
 kubectl port-forward -n monitoring svc/prometheus-grafana 3000:80
 
-# Access: http://localhost:3000
-# Username: admin
-# Password: (from above)
-
-# Import dashboard:
-# 1. Click '+' → Import
-# 2. Upload monitoring/dashboards/wordpress-dashboard.json
-# 3. Select Prometheus datasource
-# 4. Click Import
 ```
 
 ---
@@ -554,13 +538,11 @@ kubectl port-forward -n monitoring svc/prometheus-grafana 3000:80
 ### Environment Variables
 
 ```yaml
-# WordPress Configuration
 WORDPRESS_DB_HOST: mysql-service
 WORDPRESS_DB_NAME: wordpress
 WORDPRESS_DB_USER: wordpress
 WORDPRESS_DB_PASSWORD: <from-secret>
 
-# PHP-FPM Configuration
 PHP_MEMORY_LIMIT: 256M
 PHP_MAX_EXECUTION_TIME: 300
 PHP_UPLOAD_MAX_FILESIZE: 64M
@@ -571,18 +553,16 @@ PHP_UPLOAD_MAX_FILESIZE: 64M
 Key features in `nginx.conf`:
 
 ```nginx
-# Lua shared dictionary for metrics
 lua_shared_dict prometheus_metrics 10M;
 lua_shared_dict request_counters 10M;
 
-# Rate limiting with Lua
 access_by_lua_block {
     local limit = require "resty.limit.req"
     local lim, err = limit.new("request_counters", 10, 5)
     -- Rate limit: 10 req/sec, burst of 5
 }
 
-# Security headers
+# security headers
 header_filter_by_lua_block {
     ngx.header["X-Frame-Options"] = "SAMEORIGIN"
     ngx.header["X-Content-Type-Options"] = "nosniff"
@@ -741,24 +721,22 @@ receivers:
 #### Scale WordPress Pods
 
 ```bash
-# Manual scaling
 kubectl scale deployment my-wordpress -n wordpress --replicas=5
 
-# Check HPA status
+# check HPA status
 kubectl get hpa -n wordpress
 
-# Describe HPA
 kubectl describe hpa my-wordpress -n wordpress
 ```
 
 #### Update WordPress Version
 
 ```bash
-# Build new image
+# build new image
 docker build -t your-registry/wordpress:6.4.2 .
 docker push your-registry/wordpress:6.4.2
 
-# Update Helm release
+# update helm release
 helm upgrade my-wordpress ./helm/wordpress \
   --namespace wordpress \
   --set image.wordpress.tag=6.4.2 \
@@ -784,10 +762,8 @@ chmod +x backup-db.sh
 #### Database Restore
 
 ```bash
-# Copy backup to pod
 kubectl cp wordpress_backup.sql wordpress/my-wordpress-mysql-0:/tmp/
 
-# Restore
 kubectl exec -n wordpress my-wordpress-mysql-0 -- \
   mysql -u root -p${MYSQL_ROOT_PASSWORD} wordpress < /tmp/wordpress_backup.sql
 ```
@@ -795,13 +771,10 @@ kubectl exec -n wordpress my-wordpress-mysql-0 -- \
 #### View Logs
 
 ```bash
-# All WordPress pods
 kubectl logs -n wordpress -l app.kubernetes.io/name=wordpress --all-containers -f
 
-# Specific container
 kubectl logs -n wordpress -l app.kubernetes.io/name=wordpress -c nginx -f
 
-# MySQL logs
 kubectl logs -n wordpress my-wordpress-mysql-0 -f
 
 # Previous container logs (after restart)
@@ -811,14 +784,14 @@ kubectl logs -n wordpress POD_NAME -c nginx --previous
 #### Execute Commands in Pods
 
 ```bash
-# Access WordPress pod
+# access WordPress pod
 kubectl exec -it -n wordpress my-wordpress-xxxxx -c wordpress -- bash
 
-# Run WP-CLI commands
+# run WP-CLI commands
 kubectl exec -n wordpress my-wordpress-xxxxx -c wordpress -- \
   wp plugin list --allow-root
 
-# Access MySQL
+# access MySQL
 kubectl exec -it -n wordpress my-wordpress-mysql-0 -- \
   mysql -u wordpress -p
 ```
@@ -826,18 +799,14 @@ kubectl exec -it -n wordpress my-wordpress-mysql-0 -- \
 ### Maintenance Window Procedure
 
 ```bash
-# 1. Scale down to 1 replica
 kubectl scale deployment my-wordpress -n wordpress --replicas=1
 
-# 2. Disable HPA temporarily
 kubectl patch hpa my-wordpress -n wordpress -p '{"spec":{"maxReplicas":1}}'
 
-# 3. Perform maintenance...
 
-# 4. Re-enable HPA
 kubectl patch hpa my-wordpress -n wordpress -p '{"spec":{"maxReplicas":10}}'
 
-# 5. Scale back up
+# scale back up
 kubectl scale deployment my-wordpress -n wordpress --replicas=3
 ```
 
@@ -858,24 +827,16 @@ my-wordpress-5d7c9f8b6d-7xk2m   0/3     Pending   0          5m
 
 Debug:
 ```bash
-# Check pod events
 kubectl describe pod -n wordpress my-wordpress-5d7c9f8b6d-7xk2m
 
-# Common causes:
-# - Insufficient resources
-# - PVC not bound
-# - Image pull errors
 ```
 
 Solution:
 ```bash
-# Check resources
 kubectl top nodes
 
-# Check PVC
 kubectl get pvc -n wordpress
 
-# Check events
 kubectl get events -n wordpress --sort-by='.lastTimestamp'
 ```
 
@@ -890,13 +851,10 @@ wordpress-pvc         Pending                                      nfs-client
 
 Solution:
 ```bash
-# Check storage class exists
 kubectl get storageclass
 
-# Check provisioner logs
 kubectl logs -n kube-system -l app=nfs-provisioner
 
-# Manually create PV if needed
 kubectl apply -f - <<EOF
 apiVersion: v1
 kind: PersistentVolume
@@ -917,13 +875,10 @@ EOF
 
 Debug:
 ```bash
-# Check Nginx logs
 kubectl logs -n wordpress -l app.kubernetes.io/name=wordpress -c nginx | grep " 5"
 
-# Check WordPress logs
 kubectl logs -n wordpress -l app.kubernetes.io/name=wordpress -c wordpress
 
-# Check WordPress pod status
 kubectl get pods -n wordpress
 ```
 
@@ -937,14 +892,13 @@ Common causes:
 
 Debug:
 ```bash
-# Check MySQL service
 kubectl get svc -n wordpress my-wordpress-mysql
 
-# Test connection from WordPress pod
+# test connection from WordPress pod
 kubectl exec -n wordpress POD_NAME -c wordpress -- \
   mysql -h my-wordpress-mysql -u wordpress -p -e "SELECT 1"
 
-# Check MySQL logs
+# check MySQL logs
 kubectl logs -n wordpress my-wordpress-mysql-0
 ```
 
@@ -952,21 +906,17 @@ kubectl logs -n wordpress my-wordpress-mysql-0
 
 Debug:
 ```bash
-# Check ServiceMonitor
 kubectl get servicemonitor -n monitoring
 
-# Check Prometheus targets
 kubectl port-forward -n monitoring svc/prometheus-kube-prometheus-prometheus 9090:9090
 # Visit: http://localhost:9090/targets
 
-# Check Prometheus logs
 kubectl logs -n monitoring prometheus-prometheus-kube-prometheus-prometheus-0
 ```
 
 ### Debug Checklist
 
 ```markdown
-## Pre-Flight Checklist
 
 - [ ] Kubernetes cluster healthy
   ```bash
@@ -1016,7 +966,7 @@ kubectl logs -n monitoring prometheus-prometheus-kube-prometheus-prometheus-0
 - [ ] Metrics flowing
   ```bash
   kubectl port-forward -n monitoring svc/prometheus-grafana 3000:80
-  # Check dashboards
+  # check dashboards
   ```
 
 - [ ] Alerts configured
@@ -1029,35 +979,23 @@ kubectl logs -n monitoring prometheus-prometheus-kube-prometheus-prometheus-0
 
 ## Performance Tuning
 
-### Nginx/OpenResty Tuning
 
 ```nginx
-# Worker processes (= number of CPU cores)
 worker_processes auto;
 
-# Worker connections
 events {
     worker_connections 4096;
     use epoll;
     multi_accept on;
 }
 
-# Keepalive
 keepalive_timeout 65;
 keepalive_requests 1000;
 
-# Buffers
 client_body_buffer_size 128k;
 client_max_body_size 64M;
 
-# Caching
 proxy_cache_path /var/cache/nginx levels=1:2 
                  keys_zone=wordpress_cache:10m 
                  max_size=1g inactive=60m;
 ```
-
-### PHP-FPM Tuning
-
-```ini
-; Process Manager
-pm =
